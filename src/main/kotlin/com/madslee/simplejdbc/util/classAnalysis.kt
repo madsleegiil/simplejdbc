@@ -19,4 +19,4 @@ val isCustomGetter = {method: Method ->
     method.name.substring(0, 3) == "get" && method.name != "getClass"
 }
 
-val fieldNameOfGetter = { method: Method -> method.name.substring(3).lowercase() }
+val fieldNameOfGetter = { method: Method -> method.name.substring(3) }

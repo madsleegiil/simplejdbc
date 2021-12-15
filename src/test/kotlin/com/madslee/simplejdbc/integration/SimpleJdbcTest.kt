@@ -40,6 +40,17 @@ class SimpleJdbcTest {
         )
     }
 
+    @Test
+    fun `insert Item-object using simple method`() {
+        val item = Item(
+            id = "123456789",
+            description = "something something",
+            price = 123.4,
+            numberOfSales = 12
+        )
+        save(item, dataSource.connection)
+    }
+
     data class Item(
         val id: String,
         val description: String,
