@@ -1,11 +1,19 @@
 package com.madslee.simplejdbc.unit
 
+import com.madslee.simplejdbc.className
 import com.madslee.simplejdbc.fieldMap
 import com.madslee.simplejdbc.fieldNames
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ClassAnalysisTest {
+
+    @Test
+    fun `can get name of class`() {
+        val classInstance = SimpleTestClass("Certain Name", 19)
+        val name = className(classInstance)
+        assertThat(name).isEqualTo("SimpleTestClass")
+    }
 
     @Test
     fun `can get all fields for given class`() {
@@ -18,7 +26,7 @@ class ClassAnalysisTest {
     fun `can get map of fields for given class`() {
         val classInstance = SimpleTestClass("Certain Name", 19)
         val fieldMap = fieldMap(classInstance)
-        assertThat(fieldMap).isEqualTo(mapOf("name" to "Certain Name", "age" to 19))
+        assertThat(fieldMap).containsExactlyInAnyOrder(Pair("name", "Certain Name"), Pair("age", 19))
     }
 }
 
