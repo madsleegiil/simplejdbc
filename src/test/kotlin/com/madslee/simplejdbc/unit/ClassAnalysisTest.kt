@@ -1,5 +1,7 @@
-package com.madslee.simplejdbc
+package com.madslee.simplejdbc.unit
 
+import com.madslee.simplejdbc.fieldMap
+import com.madslee.simplejdbc.fieldNames
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

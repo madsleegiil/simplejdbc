@@ -13,6 +13,9 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("com.zaxxer:HikariCP:4.0.2")
+    testImplementation("com.h2database:h2:1.4.200")
+    testImplementation("org.flywaydb:flyway-core:7.5.3")
     testImplementation("org.assertj:assertj-core:3.21.0")
 }
 

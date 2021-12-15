@@ -1,5 +1,6 @@
-package com.madslee.simplejdbc
+package com.madslee.simplejdbc.unit
 
+import com.madslee.simplejdbc.allLowerCaseSnakeCase
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
