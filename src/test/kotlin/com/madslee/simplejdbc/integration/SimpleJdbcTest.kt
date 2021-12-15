@@ -59,6 +59,25 @@ class SimpleJdbcTest: TestSupport() {
         assertWasSaved(item)
     }
 
+    @Test
+    fun `insert Item-object using overriding method`() {
+        val item = Item(
+            id = "123456789",
+            description = "something something",
+            price = 123.4,
+            numberOfSales = 12
+        )
+        val overridingPrice = 99.1
+        val overridingColumnValues = mapOf("price" to overridingPrice)
+
+        save(any = item, overridingColumnValues = overridingColumnValues, connection = dataSource.connection)
+
+        val overridenItem = item.copy(price = overridingPrice)
+        assertWasSaved(overridenItem)
+    }
+
+    // TODO: Test overriding with new table name
+
     private fun assertWasSaved(item: Item) {
         val resultSet = getAllFromTable(table)
         val allItems =  generateSequence {
