@@ -1,23 +1,26 @@
 package com.madslee.simplejdbc.integration
 
 import com.madslee.simplejdbc.save
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
-import org.flywaydb.core.Flyway
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import javax.sql.DataSource
+import java.sql.ResultSet
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SimpleJdbcTest {
+class SimpleJdbcTest: TestSupport() {
 
+    private val table = "item"
     @BeforeAll
     fun beforeAll() {
         flywayMigrations(dataSource)
     }
 
-    // TODO: AfterEach drop all content
+    @AfterEach
+    fun afterEach() {
+        deleteAllFromTable(table)
+    }
 
     @Test
     fun `insert Item-object using columnsValues-map`() {
@@ -38,6 +41,8 @@ class SimpleJdbcTest {
             ),
             connection = dataSource.connection
         )
+
+        assertWasSaved(item)
     }
 
     @Test
@@ -48,8 +53,26 @@ class SimpleJdbcTest {
             price = 123.4,
             numberOfSales = 12
         )
+
         save(item, dataSource.connection)
+
+        assertWasSaved(item)
     }
+
+    private fun assertWasSaved(item: Item) {
+        val resultSet = getAllFromTable(table)
+        val allItems =  generateSequence {
+            if (resultSet.next()) toItem(resultSet) else null
+        }.toList()
+        assertThat(allItems).contains(item)
+    }
+
+    private fun toItem(resultSet: ResultSet) = Item(
+        id = resultSet.getString("id"),
+        description = resultSet.getString("description"),
+        price = resultSet.getDouble("price"),
+        numberOfSales = resultSet.getInt("number_of_sales")
+    )
 
     data class Item(
         val id: String,
@@ -57,20 +80,4 @@ class SimpleJdbcTest {
         val price: Double,
         val numberOfSales: Int
     )
-
-    private val dataSource: DataSource = HikariDataSource(
-        HikariConfig().apply {
-            jdbcUrl = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"
-            username = "sa"
-            password = ""
-            validate()
-        })
-
-    fun flywayMigrations(dataSource: DataSource) {
-        Flyway.configure()
-            .dataSource(dataSource)
-            .load()
-            .migrate()
-
-    }
 }
