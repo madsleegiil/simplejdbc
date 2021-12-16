@@ -12,6 +12,7 @@ import java.sql.ResultSet
 class SimpleJdbcTest: TestSupport() {
 
     private val table = "item"
+
     @BeforeAll
     fun beforeAll() {
         flywayMigrations(dataSource)
@@ -31,7 +32,7 @@ class SimpleJdbcTest: TestSupport() {
             numberOfSales = 12
         )
 
-        save(
+        val rowsAffected = save(
             table = "item",
             columnsValues = mapOf(
                 "id" to item.id,
@@ -42,6 +43,7 @@ class SimpleJdbcTest: TestSupport() {
             connection = dataSource.connection
         )
 
+        assertThat(rowsAffected).isEqualTo(1)
         assertWasSaved(item)
     }
 
@@ -54,8 +56,9 @@ class SimpleJdbcTest: TestSupport() {
             numberOfSales = 12
         )
 
-        save(item, dataSource.connection)
+        val rowsAffected = save(item, dataSource.connection)
 
+        assertThat(rowsAffected).isEqualTo(1)
         assertWasSaved(item)
     }
 
@@ -70,8 +73,9 @@ class SimpleJdbcTest: TestSupport() {
         val overridingPrice = 99.1
         val overridingColumnValues = mapOf("price" to overridingPrice)
 
-        save(any = item, overridingColumnValues = overridingColumnValues, connection = dataSource.connection)
+        val rowsAffected = save(any = item, overridingColumnValues = overridingColumnValues, connection = dataSource.connection)
 
+        assertThat(rowsAffected).isEqualTo(1)
         val overridenItem = item.copy(price = overridingPrice)
         assertWasSaved(overridenItem)
     }
