@@ -2,7 +2,6 @@ package com.madslee.simplejdbc
 
 import com.madslee.simplejdbc.util.*
 import java.sql.Connection
-import kotlin.reflect.KClass
 
 fun save(any: Any, connection: Connection) =
     save(
@@ -27,21 +26,3 @@ fun save(table: String, columnsValues: Map<String, Any>, connection: Connection)
             .forEachIndexed { index, any -> preparedStatement.setObject(index + 1, any) }
         preparedStatement.executeUpdate()
     }
-
-fun <T: Any> getAll(clazz: KClass<T>, table: String): List<out T> {
-    TODO("Not implemented")
-}
-
-fun getAll(table: String, columns: List<String>, connection: Connection): List<Map<String, Any>> =
-    connection.prepareStatement("select ${columns.map { it }.joinToString(", ")} from $table")
-        .executeQuery()
-        .let { resultSet ->
-            generateSequence {
-                if (resultSet.next()) {
-                    columns.map {
-                        it to resultSet.getObject(it)
-                    }.toMap()
-                } else null
-            }
-        }.toList()
-
