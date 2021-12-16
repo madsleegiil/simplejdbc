@@ -26,7 +26,7 @@ class ClassAnalysisTest {
     fun `can get map of fields for given class`() {
         val classInstance = SimpleTestClass("Certain Name", 19)
         val fieldMap = fieldMap(classInstance)
-        assertThat(fieldMap).containsExactlyInAnyOrder(Pair("name", "Certain Name"), Pair("age", 19))
+        assertThat(fieldMap).containsExactlyInAnyOrderEntriesOf(mapOf(Pair("name", "Certain Name"), Pair("age", 19)))
     }
 }
 

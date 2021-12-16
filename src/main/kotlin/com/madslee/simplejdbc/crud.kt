@@ -1,11 +1,12 @@
 package com.madslee.simplejdbc
 
+import com.madslee.simplejdbc.util.joinWith
 import java.sql.Connection
 
 fun save(any: Any, connection: Connection) {
     save(
         table = className(any)!!,
-        columnsValues = fieldMap(any).toMap(),
+        columnsValues = fieldMap(any),
         connection = connection
     )
 }
@@ -13,11 +14,7 @@ fun save(any: Any, connection: Connection) {
 fun save(any: Any, table: String = className(any)!!, overridingColumnValues: Map<String, Any>, connection: Connection) {
     save(
         table = table,
-        columnsValues = fieldMap(any).toMap().toMutableMap().apply {
-            overridingColumnValues.forEach { overridingColumnValues ->
-                this[overridingColumnValues.key] = overridingColumnValues.value
-            }
-        },
+        columnsValues = fieldMap(any).toMutableMap().joinWith(overridingColumnValues),
         connection = connection
     )
 }

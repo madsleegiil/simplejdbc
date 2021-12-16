@@ -16,7 +16,7 @@ val allLowerCaseSnakeCase: (camelCase: String) -> String = { word ->
         }
     }
 
-    convert(toConvert = word, lastConvertedWasUppercase = true)
+    convert(toConvert = word)
 }
 
 fun Char.isUppercase() = this.uppercaseChar() == this

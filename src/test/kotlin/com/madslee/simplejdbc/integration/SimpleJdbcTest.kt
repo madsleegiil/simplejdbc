@@ -76,8 +76,6 @@ class SimpleJdbcTest: TestSupport() {
         assertWasSaved(overridenItem)
     }
 
-    // TODO: Test overriding with new table name
-
     private fun assertWasSaved(item: Item) {
         val resultSet = getAllFromTable(table)
         val allItems =  generateSequence {
