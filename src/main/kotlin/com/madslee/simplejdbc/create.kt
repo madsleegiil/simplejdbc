@@ -19,7 +19,7 @@ fun save(any: Any, table: String = className(any)!!, overridingColumnValues: Map
 
 fun save(table: String, columnsValues: Map<String, Any>, connection: Connection) =
     connection.prepareStatement(
-        parameterizableInsertString(table, columnsValues.map { allLowerCaseSnakeCase(it.key) })
+        parameterizableInsertStatement(table, columnsValues.map { allLowerCaseSnakeCase(it.key) })
     ).let { preparedStatement ->
         columnsValues
             .map { it.value }
