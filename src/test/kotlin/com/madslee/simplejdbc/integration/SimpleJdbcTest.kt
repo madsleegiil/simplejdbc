@@ -114,6 +114,32 @@ class SimpleJdbcTest: TestSupport() {
         }
     }
 
+    @Test
+    fun `get saved items by specifying table only`() {
+        // Setup
+        val firstItem = Item(
+            id = "123456789",
+            description = "something something",
+            price = 123.4,
+            numberOfSales = 12
+        )
+        val secondItem = Item(
+            id = "987654321",
+            description = "something something",
+            price = 123.4,
+            numberOfSales = 12
+        )
+        save(firstItem, dataSource.connection)
+        save(secondItem, dataSource.connection)
+
+        // Action
+        val allRows = getAll(Item::class, table)
+
+        // Results
+        assertThat(allRows.size).isEqualTo(2)
+        assertThat(allRows).containsExactly(firstItem, secondItem)
+    }
+
     private fun assertWasSaved(item: Item) {
         val resultSet = getAllFromTable(table)
         val allItems =  generateSequence {

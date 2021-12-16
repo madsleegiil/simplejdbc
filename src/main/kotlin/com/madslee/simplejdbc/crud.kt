@@ -2,6 +2,7 @@ package com.madslee.simplejdbc
 
 import com.madslee.simplejdbc.util.*
 import java.sql.Connection
+import kotlin.reflect.KClass
 
 fun save(any: Any, connection: Connection) =
     save(
@@ -17,7 +18,6 @@ fun save(any: Any, table: String = className(any)!!, overridingColumnValues: Map
         connection = connection
     )
 
-// TODO: Test rows affected
 fun save(table: String, columnsValues: Map<String, Any>, connection: Connection) =
     connection.prepareStatement(
         parameterizableInsertString(table, columnsValues.map { allLowerCaseSnakeCase(it.key) })
@@ -28,6 +28,9 @@ fun save(table: String, columnsValues: Map<String, Any>, connection: Connection)
         preparedStatement.executeUpdate()
     }
 
+fun <T: Any> getAll(clazz: KClass<T>, table: String): List<out T> {
+    TODO("Not implemented")
+}
 
 fun getAll(table: String, columns: List<String>, connection: Connection): List<Map<String, Any>> =
     connection.prepareStatement("select ${columns.map { it }.joinToString(", ")} from $table")
@@ -42,19 +45,3 @@ fun getAll(table: String, columns: List<String>, connection: Connection): List<M
             }
         }.toList()
 
-
-//fun <T> getAll(table: String, toClass: T, connection: Connection): List<T> {
-//    connection.prepareStatement("select * from $table").executeQuery().let { resultSet ->
-//        generateSequence {
-//            if (resultSet.next()) {
-//                resultSet.
-//            }
-//        }.toList()
-//    }
-//}
-
-/*
-            return generateSequence {
-                if (resultSet.next()) tilIdentMapping(resultSet) else null
-            }.toList()
- */
