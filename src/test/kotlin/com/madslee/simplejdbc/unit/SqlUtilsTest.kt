@@ -1,10 +1,10 @@
 package com.madslee.simplejdbc.unit
 
-import com.madslee.simplejdbc.parameterizableInsertString
+import com.madslee.simplejdbc.util.parameterizableInsertString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CrudTest {
+class SqlUtilsTest {
 
     @Test
     fun `create parameterizable input string`() {

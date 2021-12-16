@@ -1,4 +1,4 @@
-package com.madslee.simplejdbc
+package com.madslee.simplejdbc.util
 
 val allLowerCaseSnakeCase: (camelCase: String) -> String = { word ->
     tailrec fun convert(toConvert: String, result: String = "", lastConvertedWasUppercase: Boolean = false): String {

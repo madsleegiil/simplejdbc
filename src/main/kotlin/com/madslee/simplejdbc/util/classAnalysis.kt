@@ -1,4 +1,4 @@
-package com.madslee.simplejdbc
+package com.madslee.simplejdbc.util
 
 import java.lang.reflect.Method
 

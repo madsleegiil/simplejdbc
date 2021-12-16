@@ -1,6 +1,6 @@
 package com.madslee.simplejdbc
 
-import com.madslee.simplejdbc.util.joinWith
+import com.madslee.simplejdbc.util.*
 import java.sql.Connection
 
 fun save(any: Any, connection: Connection) {
@@ -29,8 +29,3 @@ fun save(table: String, columnsValues: Map<String, Any>, connection: Connection)
         preparedStatement.executeUpdate()
     }
 }
-
-val parameterizableInsertString = { table: String, columns: List<String> ->
-    "insert into $table (${columns.joinToString(", ")}) values (${columns.map { "?" }.joinToString(", ")});"
-}
-
