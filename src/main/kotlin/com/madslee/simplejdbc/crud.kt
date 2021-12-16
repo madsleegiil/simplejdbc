@@ -10,7 +10,6 @@ fun save(any: Any, connection: Connection) =
         connection = connection
     )
 
-
 fun save(any: Any, table: String = className(any)!!, overridingColumnValues: Map<String, Any>, connection: Connection) =
     save(
         table = table,
@@ -30,19 +29,19 @@ fun save(table: String, columnsValues: Map<String, Any>, connection: Connection)
     }
 
 
-//fun getAll(table: String, columns: List<String>, connection: Connection): Map<String, Any> {
-//    return connection.prepareStatement("select ${columns.map { it }.joinToString(", ")} from $table")
-//        .executeQuery()
-//        .let { resultSet ->
-//            generateSequence {
-//                if (resultSet.next()) {
-//                    columns.map {
-//                        it to resultSet.getObject(it)
-//                    }
-//                } else null
-//            }.toList()
-//        }
-//}
+fun getAll(table: String, columns: List<String>, connection: Connection): List<Map<String, Any>> =
+    connection.prepareStatement("select ${columns.map { it }.joinToString(", ")} from $table")
+        .executeQuery()
+        .let { resultSet ->
+            generateSequence {
+                if (resultSet.next()) {
+                    columns.map {
+                        it to resultSet.getObject(it)
+                    }.toMap()
+                } else null
+            }
+        }.toList()
+
 
 //fun <T> getAll(table: String, toClass: T, connection: Connection): List<T> {
 //    connection.prepareStatement("select * from $table").executeQuery().let { resultSet ->
