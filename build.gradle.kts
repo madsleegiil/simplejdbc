@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.0")
     testImplementation(kotlin("test"))
     testImplementation("com.zaxxer:HikariCP:4.0.2")
     testImplementation("com.h2database:h2:1.4.200")

@@ -1,7 +1,13 @@
 package com.madslee.simplejdbc.util
 
 import java.lang.reflect.Method
+import kotlin.reflect.full.primaryConstructor
 
+// TODO: Change all to kotlin reflect
+
+val primaryConstructor = { any: Any ->
+    any::class.primaryConstructor
+}
 
 val fieldNames = { any: Any ->
     any.javaClass.declaredFields.map { it.name }
