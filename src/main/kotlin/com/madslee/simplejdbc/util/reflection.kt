@@ -1,6 +1,8 @@
 package com.madslee.simplejdbc.util
 
+import java.lang.reflect.Constructor
 import java.lang.reflect.Method
+import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
@@ -32,4 +34,8 @@ private val fieldNameOfGetter = { method: Method ->
     method.name
         .substring(3)
         .replaceFirstChar { it.lowercaseChar() }
+}
+
+val constructorParametersSorted: (KFunction<*>) -> List<String> = { constructor ->
+    constructor.parameters.mapNotNull { it.name }
 }
