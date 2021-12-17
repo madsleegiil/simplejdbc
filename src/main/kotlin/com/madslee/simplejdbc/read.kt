@@ -15,7 +15,7 @@ fun <T: Any> getAll(clazz: KClass<T>, table: String, connection: Connection): Li
     ).map {
 
     }.map {
-        primaryConstructor(clazz)!!.callBy()
+        //primaryConstructor(clazz)!!.callBy()
     }
 
 fun getAll(table: String, columns: List<String>, connection: Connection): List<Map<String, Any>> =

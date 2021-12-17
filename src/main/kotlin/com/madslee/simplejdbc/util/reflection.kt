@@ -1,6 +1,8 @@
 package com.madslee.simplejdbc.util
 
 import java.lang.reflect.Method
+import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 
 // TODO: Change all to kotlin reflect
@@ -10,7 +12,7 @@ val primaryConstructor = { any: Any ->
 }
 
 val fieldNames = { any: Any ->
-    any.javaClass.declaredFields.map { it.name }
+    any::class.declaredMemberProperties.map { it.name }
 }
 
 val fieldMap: (Any) -> Map<String, Any> = { any: Any ->

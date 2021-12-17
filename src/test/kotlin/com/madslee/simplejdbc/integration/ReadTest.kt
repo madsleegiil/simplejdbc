@@ -40,6 +40,7 @@ class ReadTest: TestSupport() {
         }
     }
 
+    /*
    @Test
    fun `get saved items by specifying table only`() {
        // Setup
@@ -65,4 +66,6 @@ class ReadTest: TestSupport() {
        assertThat(allRows.size).isEqualTo(2)
        assertThat(allRows).containsExactly(firstItem, secondItem)
    }
+
+     */
 }
