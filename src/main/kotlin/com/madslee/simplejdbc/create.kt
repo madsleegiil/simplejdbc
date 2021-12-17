@@ -10,7 +10,22 @@ fun save(any: Any, connection: Connection) =
         connection = connection
     )
 
-fun save(any: Any, table: String = className(any)!!, overridingColumnValues: Map<String, Any>, connection: Connection) =
+fun save(any: Any, table: String, connection: Connection) =
+    save(
+        table = table,
+        columnsValues = fieldMap(any),
+        connection = connection
+    )
+
+fun save(any: Any, overridingColumnValues: Map<String, Any>, connection: Connection) =
+    save(
+        any = any,
+        table = className(any)!!,
+        overridingColumnValues = overridingColumnValues,
+        connection = connection
+    )
+
+fun save(any: Any, table: String, overridingColumnValues: Map<String, Any>, connection: Connection) =
     save(
         table = table,
         columnsValues = fieldMap(any).toMutableMap().joinWith(overridingColumnValues),
