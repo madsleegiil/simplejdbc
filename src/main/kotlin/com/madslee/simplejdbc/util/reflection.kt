@@ -2,6 +2,7 @@ package com.madslee.simplejdbc.util
 
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
+import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.full.declaredMemberProperties
@@ -26,7 +27,7 @@ val fieldMap: (Any) -> Map<String, Any> = { any: Any ->
 
 val className = { any: Any -> any::class.simpleName }
 
-private val isCustomGetter = {method: Method ->
+private val isCustomGetter = { method: Method ->
     method.name.substring(0, 3) == "get" && method.name != "getClass"
 }
 
@@ -36,6 +37,8 @@ private val fieldNameOfGetter = { method: Method ->
         .replaceFirstChar { it.lowercaseChar() }
 }
 
-val constructorParametersSorted: (KFunction<*>) -> List<String> = { constructor ->
-    constructor.parameters.mapNotNull { it.name }
+val primaryConstructorParameterNames: (clazz: KClass<*>) -> List<String> = { clazz ->
+    clazz.primaryConstructor?.parameters
+        ?.mapNotNull { it.name }
+        ?: listOf()
 }

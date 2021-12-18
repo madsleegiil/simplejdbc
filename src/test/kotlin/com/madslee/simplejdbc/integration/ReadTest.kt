@@ -41,7 +41,7 @@ class ReadTest: TestSupport() {
     }
 
    @Test
-   fun `get saved items by specifying table only`() {
+   fun `get saved items by specifying class only`() {
        // Setup
        val firstItem = Item(
            id = "123456789",
