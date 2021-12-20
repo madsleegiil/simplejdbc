@@ -1,10 +1,7 @@
 package com.madslee.simplejdbc.util
 
-import java.lang.reflect.Constructor
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
-import kotlin.reflect.KFunction
-import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 
@@ -41,4 +38,10 @@ val primaryConstructorParameterNames: (clazz: KClass<*>) -> List<String> = { cla
     clazz.primaryConstructor?.parameters
         ?.mapNotNull { it.name }
         ?: listOf()
+}
+
+val sortMapValuesByPrimaryConstructorParameterOrder: (clazz: KClass<*>, map: Map<String, Any>) -> Array<Any> = { clazz, map ->
+    val constructorParameterNames = primaryConstructorParameterNames(clazz)
+    val constructorParameterNamesWithSqlCasing = constructorParameterNames.map { allLowerCaseSnakeCase(it) }
+    map.valuesWithKeySorting(constructorParameterNamesWithSqlCasing).values.toTypedArray()
 }

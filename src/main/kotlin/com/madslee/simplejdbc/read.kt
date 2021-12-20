@@ -14,21 +14,17 @@ fun <T: Any> getAll(clazz: KClass<T>, table: String, connection: Connection): Li
         columns = clazz.memberProperties.map { allLowerCaseSnakeCase(it.name) },
         connection = connection
     ).map { databaseRow ->
-        clazz.primaryConstructor!!.call(
-            *databaseRow.valuesWithKeySorting(
-                primaryConstructorParameterNames(clazz).map { allLowerCaseSnakeCase(it) }
-            ).values.toTypedArray()
-        )
+        clazz.primaryConstructor!!.call(*sortMapValuesByPrimaryConstructorParameterOrder(clazz, databaseRow))
     }
 
 fun getAll(table: String, columns: List<String>, connection: Connection): List<Map<String, Any>> =
     connection.prepareStatement(selectColumnsStatement(table, columns))
         .executeQuery()
-        .map { resultSet ->
+        .map { resultSetRow ->
             columns.associateWith {
-                when (resultSet.getObject(it).javaClass.typeName) {
-                    "org.h2.jdbc.JdbcClob" -> resultSet.getString(it) // TODO: Test with postgres
-                    else -> resultSet.getObject(it)
+                when (resultSetRow.getObject(it).javaClass.typeName) {
+                    "org.h2.jdbc.JdbcClob" -> resultSetRow.getString(it) // TODO: Test with postgres
+                    else -> resultSetRow.getObject(it)
                 }
             }
         }
