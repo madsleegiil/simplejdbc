@@ -1,6 +1,9 @@
 package com.madslee.simplejdbc.util
 
-internal fun String.sqlCase(): String {
+/**
+ * Converts the string to all lower case snake case
+ */
+internal fun String.toSqlCase(): String {
     tailrec fun convert(toConvert: String, result: String = "", lastConvertedWasUppercase: Boolean = false): String {
         return if (toConvert.isEmpty()) {
             result
@@ -19,4 +22,4 @@ internal fun String.sqlCase(): String {
     return convert(toConvert = this)
 }
 
-fun Char.isUppercase() = this.uppercaseChar() == this
+private fun Char.isUppercase() = this.uppercaseChar() == this

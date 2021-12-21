@@ -7,9 +7,8 @@ import kotlin.reflect.full.primaryConstructor
 
 internal val Any.fieldsValuesMap: Map<String, Any>
     get() = this::class.java.methods
-        .filter { isCustomGetter(it) }
-        .map { fieldNameOfGetter(it) to it.invoke(this) }
-        .toMap()
+        .filter { it.isCustomGetter }
+        .associate { it.relatedFieldName to it.invoke(this) }
 
 internal val Any.className: String
     get() = this::class.simpleName ?: throw RuntimeException("Unable to get class name for $this")
@@ -17,21 +16,19 @@ internal val Any.className: String
 internal val KClass<*>.name: String
     get() = this.simpleName ?: throw RuntimeException("Unable to get class name for $this")
 
-private val isCustomGetter = { method: Method ->
-    method.name.substring(0, 3) == "get" && method.name != "getClass"
-}
+internal val Method.isCustomGetter: Boolean
+    get() = this.name.substring(0, 3) == "get" && this.name != "getClass"
 
 internal val KClass<*>.fields: List<String>
     get() = this.memberProperties.map { it.name }
 
-private val fieldNameOfGetter = { method: Method ->
-    method.name
+internal val Method.relatedFieldName: String
+    get() = this.name
         .substring(3)
         .replaceFirstChar { it.lowercaseChar() }
-}
 
 fun KClass<*>.callConstructor(argumentNamesValues: Map<String, Any>): Any {
-    val paramNamesWithSqlCasing = primaryConstructorParameterNames.map { it.sqlCase() }
+    val paramNamesWithSqlCasing = primaryConstructorParameterNames.map { it.toSqlCase() }
     val argumentsInCorrectOrder = argumentNamesValues.valuesWithKeySorting(paramNamesWithSqlCasing).values.toList()
     return primaryConstructor?.call(*argumentsInCorrectOrder.toTypedArray())
         ?: throw RuntimeException("Unable to get primary constructor for class ${this.name}")
