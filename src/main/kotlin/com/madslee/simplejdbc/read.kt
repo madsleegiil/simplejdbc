@@ -13,10 +13,11 @@ fun <T: Any> getAll(clazz: KClass<T>, connection: Connection) =
 fun <T: Any> getAll(clazz: KClass<T>, table: String, connection: Connection): List<Any> =
     getAll(
         table = table,
-        columns = clazz.fields.map { it.toSqlCase() },
+        columns = clazz.fields.map { it.camelCasetoSqlCase() },
         connection = connection
     ).map { databaseRow ->
-        clazz.callConstructor(databaseRow)
+
+        clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap())
     }
 
 fun getAll(table: String, columns: List<String>, connection: Connection): List<Map<String, Any>> =

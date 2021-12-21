@@ -34,7 +34,7 @@ fun save(any: Any, table: String, overridingColumnValues: Map<String, Any>, conn
 
 fun save(table: String, columnsValues: Map<String, Any>, connection: Connection) =
     connection.prepareStatement(
-        createParameterizableInsertStatement(table, columnsValues.keys.map { it.toSqlCase() })
+        createParameterizableInsertStatement(table, columnsValues.keys.map { it.camelCasetoSqlCase() })
     ).let { preparedStatement ->
         preparedStatement.addParams(columnsValues.values)
         preparedStatement.executeUpdate()

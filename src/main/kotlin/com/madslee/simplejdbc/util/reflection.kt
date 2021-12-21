@@ -28,8 +28,9 @@ internal val Method.relatedFieldName: String
         .replaceFirstChar { it.lowercaseChar() }
 
 fun KClass<*>.callConstructor(argumentNamesValues: Map<String, Any>): Any {
-    val paramNamesWithSqlCasing = primaryConstructorParameterNames.map { it.toSqlCase() }
-    val argumentsInCorrectOrder = argumentNamesValues.valuesWithKeySorting(paramNamesWithSqlCasing).values.toList()
+    // TODO: convert paramNames and argumentNames to lower case before matching
+    val paramNames = primaryConstructorParameterNames
+    val argumentsInCorrectOrder = argumentNamesValues.valuesWithKeySorting(paramNames).values.toList()
     return primaryConstructor?.call(*argumentsInCorrectOrder.toTypedArray())
         ?: throw RuntimeException("Unable to get primary constructor for class ${this.name}")
 }
