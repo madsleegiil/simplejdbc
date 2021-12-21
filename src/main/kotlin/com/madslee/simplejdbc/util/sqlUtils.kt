@@ -19,3 +19,9 @@ fun <T> ResultSet.map(mapper: (ResultSet) -> T): List<T> {
         }
     }.toList()
 }
+
+fun ResultSet.get(column: String): Any =
+    when (this.getObject(column).javaClass.typeName) {
+        "org.h2.jdbc.JdbcClob" -> this.getString(column) // TODO: Test with postgres
+        else -> this.getObject(column)
+    }

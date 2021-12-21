@@ -21,10 +21,5 @@ fun getAll(table: String, columns: List<String>, connection: Connection): List<M
     connection.prepareStatement(selectColumnsStatement(table, columns))
         .executeQuery()
         .map { resultSetRow ->
-            columns.associateWith {
-                when (resultSetRow.getObject(it).javaClass.typeName) {
-                    "org.h2.jdbc.JdbcClob" -> resultSetRow.getString(it) // TODO: Test with postgres
-                    else -> resultSetRow.getObject(it)
-                }
-            }
+            columns.associateWith { resultSetRow.get(it) }
         }
