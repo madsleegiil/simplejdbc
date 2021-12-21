@@ -1,7 +1,7 @@
 package com.madslee.simplejdbc.util
 
 
-fun <K, V> Map<K, V>.joinWith(overridingEntries: Map<K, V>): Map<K, V> {
+internal fun <K, V> Map<K, V>.joinWith(overridingEntries: Map<K, V>): Map<K, V> {
     val newMap: MutableMap<K, V> = overridingEntries.toMutableMap()
 
     this.forEach { (key, value) ->
@@ -10,7 +10,7 @@ fun <K, V> Map<K, V>.joinWith(overridingEntries: Map<K, V>): Map<K, V> {
     return newMap
 }
 
-fun <K, V> Map<K, V>.valuesWithKeySorting(keySorting: List<K>): Map<K, V> {
+internal fun <K, V> Map<K, V>.valuesWithKeySorting(keySorting: List<K>): Map<K, V> {
     val newMap: MutableMap<K, V> = mutableMapOf()
 
     keySorting.forEach {
