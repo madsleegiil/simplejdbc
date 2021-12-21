@@ -1,10 +1,10 @@
 package com.madslee.simplejdbc.util
 
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 
-internal val parameterizableInsertStatement = { table: String, columns: List<String> ->
+internal fun createParameterizableInsertStatement(table: String, columns: List<String>) =
     "insert into $table (${columns.joinToString(", ")}) values (${columns.map { "?" }.joinToString(", ")});"
-}
 
 internal val selectColumnsStatement = { table: String, columns: List<String> ->
     "select ${columns.map { it }.joinToString(", ")} from $table"
@@ -25,3 +25,6 @@ internal fun ResultSet.get(column: String): Any =
         "org.h2.jdbc.JdbcClob" -> this.getString(column) // TODO: Test with postgres
         else -> this.getObject(column)
     }
+
+internal fun PreparedStatement.addParams(orderedParams: Collection<Any>) =
+    orderedParams.forEachIndexed { index, any -> this.setObject(index + 1, any) }

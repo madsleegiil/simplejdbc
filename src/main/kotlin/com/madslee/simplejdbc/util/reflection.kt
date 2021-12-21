@@ -2,31 +2,27 @@ package com.madslee.simplejdbc.util
 
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
-import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 
-// TODO: Change all to kotlin reflect
-
-internal val primaryConstructor = { any: Any ->
-    any::class.primaryConstructor
-}
-
-internal val fieldNames = { any: Any ->
-    any::class.declaredMemberProperties.map { it.name }
-}
-
-internal val fieldMap: (Any) -> Map<String, Any> = { any: Any ->
-    any::class.java.methods
+internal val Any.fieldsValuesMap: Map<String, Any>
+    get() = this::class.java.methods
         .filter { isCustomGetter(it) }
-        .map { fieldNameOfGetter(it) to it.invoke(any) }
+        .map { fieldNameOfGetter(it) to it.invoke(this) }
         .toMap()
-}
 
-internal val className = { any: Any -> any::class.simpleName }
+internal val Any.className: String
+    get() = this::class.simpleName ?: throw RuntimeException("Unable to get class name for $this")
+
+internal val KClass<*>.name: String
+    get() = this.simpleName ?: throw RuntimeException("Unable to get class name for $this")
 
 private val isCustomGetter = { method: Method ->
     method.name.substring(0, 3) == "get" && method.name != "getClass"
 }
+
+internal val KClass<*>.fields: List<String>
+    get() = this.memberProperties.map { it.name }
 
 private val fieldNameOfGetter = { method: Method ->
     method.name
@@ -34,14 +30,14 @@ private val fieldNameOfGetter = { method: Method ->
         .replaceFirstChar { it.lowercaseChar() }
 }
 
-internal val primaryConstructorParameterNames: (clazz: KClass<*>) -> List<String> = { clazz ->
-    clazz.primaryConstructor?.parameters
-        ?.mapNotNull { it.name }
-        ?: listOf()
+fun KClass<*>.callConstructor(argumentNamesValues: Map<String, Any>): Any {
+    val paramNamesWithSqlCasing = primaryConstructorParameterNames.map { it.sqlCase() }
+    val argumentsInCorrectOrder = argumentNamesValues.valuesWithKeySorting(paramNamesWithSqlCasing).values.toList()
+    return primaryConstructor?.call(*argumentsInCorrectOrder.toTypedArray())
+        ?: throw RuntimeException("Unable to get primary constructor for class ${this.name}")
 }
 
-internal val sortMapValuesByPrimaryConstructorParameterOrder: (clazz: KClass<*>, map: Map<String, Any>) -> Array<Any> = { clazz, map ->
-    val constructorParameterNames = primaryConstructorParameterNames(clazz)
-    val constructorParameterNamesWithSqlCasing = constructorParameterNames.map { allLowerCaseSnakeCase(it) }
-    map.valuesWithKeySorting(constructorParameterNamesWithSqlCasing).values.toTypedArray()
-}
+internal val KClass<*>.primaryConstructorParameterNames: List<String>
+    get() = this.primaryConstructor?.parameters
+        ?.mapNotNull { it.name }
+        ?: listOf()

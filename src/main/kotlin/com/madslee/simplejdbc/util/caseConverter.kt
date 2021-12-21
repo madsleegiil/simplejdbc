@@ -1,6 +1,6 @@
 package com.madslee.simplejdbc.util
 
-internal val allLowerCaseSnakeCase: (camelCase: String) -> String = { word ->
+internal fun String.sqlCase(): String {
     tailrec fun convert(toConvert: String, result: String = "", lastConvertedWasUppercase: Boolean = false): String {
         return if (toConvert.isEmpty()) {
             result
@@ -16,7 +16,7 @@ internal val allLowerCaseSnakeCase: (camelCase: String) -> String = { word ->
         }
     }
 
-    convert(toConvert = word)
+    return convert(toConvert = this)
 }
 
 fun Char.isUppercase() = this.uppercaseChar() == this
