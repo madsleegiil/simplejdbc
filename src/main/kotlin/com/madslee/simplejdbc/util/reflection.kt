@@ -19,8 +19,8 @@ internal val KClass<*>.name: String
 internal val Method.isCustomGetter: Boolean
     get() = this.name.substring(0, 3) == "get" && this.name != "getClass"
 
-internal val KClass<*>.fields: List<String>
-    get() = this.memberProperties.map { it.name }
+internal val KClass<*>.fields: Map<String, KClass<*>>
+    get() = this.memberProperties.associate { it.name to it.javaClass.kotlin }
 
 internal val Method.relatedFieldName: String
     get() = this.name
@@ -39,3 +39,6 @@ internal val KClass<*>.primaryConstructorParameterNames: List<String>
     get() = this.primaryConstructor?.parameters
         ?.mapNotNull { it.name }
         ?: listOf()
+
+internal val KClass<*>.isJavaPrimitive: Boolean
+    get() = this.javaPrimitiveType != null

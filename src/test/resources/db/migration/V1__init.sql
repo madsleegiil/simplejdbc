@@ -4,5 +4,6 @@ CREATE TABLE item (
     price FLOAT,
     number_of_sales INTEGER,
     first_sale DATE,
-    local_date_time_field TIMESTAMP(9)
+    local_date_time_field TIMESTAMP(9),
+    zoned_date_time_field TIMESTAMP(9)
 );

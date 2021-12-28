@@ -61,7 +61,8 @@ open class TestSupport {
         price = 123.4,
         numberOfSales = 12,
         firstSale = LocalDate.now(),
-        localDateTimeField = LocalDateTime.now()
+        localDateTimeField = LocalDateTime.now(),
+        zonedDateTimeField = ZonedDateTime.now()
     )
 
     fun toItem(resultSet: ResultSet) = Item(
@@ -70,7 +71,8 @@ open class TestSupport {
         price = resultSet.getDouble("price"),
         numberOfSales = resultSet.getInt("number_of_sales"),
         firstSale = LocalDate.parse(resultSet.getString("first_sale")),
-        localDateTimeField = resultSet.getObject("local_date_time_field", LocalDateTime::class.java)
+        localDateTimeField = resultSet.getObject("local_date_time_field", LocalDateTime::class.java),
+        zonedDateTimeField = resultSet.getObject("zoned_date_time_field", ZonedDateTime::class.java)
     )
 
     data class Item(
@@ -79,7 +81,8 @@ open class TestSupport {
         val price: Double,
         val numberOfSales: Int,
         val firstSale: LocalDate,
-        val localDateTimeField: LocalDateTime
+        val localDateTimeField: LocalDateTime,
+        val zonedDateTimeField: ZonedDateTime,
     ) {
         fun asColumnsValues() = mapOf(
             "id" to id,
@@ -87,7 +90,8 @@ open class TestSupport {
             "price" to price,
             "numberOfSales" to numberOfSales,
             "firstSale" to firstSale,
-            "localDateTimeField" to localDateTimeField
+            "localDateTimeField" to localDateTimeField,
+            "zonedDateTimeField" to zonedDateTimeField
         )
     }
 }
