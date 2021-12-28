@@ -3,7 +3,6 @@ package com.madslee.simplejdbc.integration
 import com.madslee.simplejdbc.save
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 
 class CreateTest: TestSupport() {
 
@@ -11,23 +10,9 @@ class CreateTest: TestSupport() {
 
     @Test
     fun `insert Item-object using columnsValues-map`() {
-        val item = Item(
-            id = "123456789",
-            description = "something something",
-            price = 123.4,
-            numberOfSales = 12,
-            firstSale = LocalDate.now()
-        )
-
         val rowsAffected = connection.save(
             table = "item",
-            columnsValues = mapOf(
-                "id" to item.id,
-                "description" to item.description,
-                "price" to item.price,
-                "numberOfSales" to item.numberOfSales,
-                "firstSale" to item.firstSale
-            )
+            columnsValues = item.asColumnsValues()
         )
 
         Assertions.assertThat(rowsAffected).isEqualTo(1)
@@ -36,14 +21,6 @@ class CreateTest: TestSupport() {
 
     @Test
     fun `insert Item-object using simple method`() {
-        val item = Item(
-            id = "123456789",
-            description = "something something",
-            price = 123.4,
-            numberOfSales = 12,
-            firstSale = LocalDate.now()
-        )
-
         val rowsAffected = connection.save(item)
 
         Assertions.assertThat(rowsAffected).isEqualTo(1)
@@ -52,13 +29,6 @@ class CreateTest: TestSupport() {
 
     @Test
     fun `insert Item-object using overriding method`() {
-        val item = Item(
-            id = "123456789",
-            description = "something something",
-            price = 123.4,
-            numberOfSales = 12,
-            firstSale = LocalDate.now()
-        )
         val overridingPrice = 99.1
         val overridingColumnValues = mapOf("price" to overridingPrice)
 

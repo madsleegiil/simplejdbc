@@ -3,5 +3,6 @@ CREATE TABLE item (
     description TEXT,
     price FLOAT,
     number_of_sales INTEGER,
-    first_sale DATE
+    first_sale DATE,
+    local_date_time_field TIMESTAMP(9)
 );

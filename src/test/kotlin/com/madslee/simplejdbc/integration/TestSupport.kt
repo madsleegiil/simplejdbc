@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import java.sql.ResultSet
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import javax.sql.DataSource
 
@@ -54,12 +55,22 @@ open class TestSupport {
         return dataSource.connection.prepareStatement("select * from $table").executeQuery()
     }
 
+    val item = Item(
+        id = "123456789",
+        description = "something something",
+        price = 123.4,
+        numberOfSales = 12,
+        firstSale = LocalDate.now(),
+        localDateTimeField = LocalDateTime.now()
+    )
+
     fun toItem(resultSet: ResultSet) = Item(
         id = resultSet.getString("id"),
         description = resultSet.getString("description"),
         price = resultSet.getDouble("price"),
         numberOfSales = resultSet.getInt("number_of_sales"),
-        firstSale = LocalDate.parse(resultSet.getString("first_sale"))
+        firstSale = LocalDate.parse(resultSet.getString("first_sale")),
+        localDateTimeField = resultSet.getObject("local_date_time_field", LocalDateTime::class.java)
     )
 
     data class Item(
@@ -67,6 +78,16 @@ open class TestSupport {
         val description: String,
         val price: Double,
         val numberOfSales: Int,
-        val firstSale: LocalDate
-    )
+        val firstSale: LocalDate,
+        val localDateTimeField: LocalDateTime
+    ) {
+        fun asColumnsValues() = mapOf(
+            "id" to id,
+            "description" to description,
+            "price" to price,
+            "numberOfSales" to numberOfSales,
+            "firstSale" to firstSale,
+            "localDateTimeField" to localDateTimeField
+        )
+    }
 }

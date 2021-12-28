@@ -3,6 +3,7 @@ package com.madslee.simplejdbc.util
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal fun createParameterizableInsertStatement(table: String, columns: List<String>) =
     "insert into $table (${columns.joinToString(", ")}) values (${columns.map { "?" }.joinToString(", ")});"
@@ -22,6 +23,8 @@ internal fun <T> ResultSet.map(mapper: (ResultSet) -> T): List<T> {
 
 internal fun ResultSet.get(column: String): Any =
     when (this.getObject(column).javaClass.typeName) {
+        "java.sql.Date" -> this.getObject(column, LocalDate::class.java)
+        "java.sql.Timestamp" -> this.getObject(column, LocalDateTime::class.java)
         "org.h2.jdbc.JdbcClob" -> this.getString(column) // TODO: Test with postgres
         else -> this.getObject(column)
     }
