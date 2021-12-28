@@ -7,6 +7,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import java.sql.ResultSet
+import java.time.LocalDate
+import java.time.ZonedDateTime
 import javax.sql.DataSource
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -56,13 +58,15 @@ open class TestSupport {
         id = resultSet.getString("id"),
         description = resultSet.getString("description"),
         price = resultSet.getDouble("price"),
-        numberOfSales = resultSet.getInt("number_of_sales")
+        numberOfSales = resultSet.getInt("number_of_sales"),
+        firstSale = LocalDate.parse(resultSet.getString("first_sale"))
     )
 
     data class Item(
         val id: String,
         val description: String,
         val price: Double,
-        val numberOfSales: Int
+        val numberOfSales: Int,
+        val firstSale: LocalDate
     )
 }

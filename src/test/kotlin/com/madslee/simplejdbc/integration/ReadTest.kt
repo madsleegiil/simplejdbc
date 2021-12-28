@@ -4,6 +4,7 @@ import com.madslee.simplejdbc.getAll
 import com.madslee.simplejdbc.save
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 class ReadTest: TestSupport() {
 
@@ -16,13 +17,15 @@ class ReadTest: TestSupport() {
             id = "123456789",
             description = "something something",
             price = 123.4,
-            numberOfSales = 12
+            numberOfSales = 12,
+            firstSale = LocalDate.now()
         )
         val secondItem = Item(
             id = "987654321",
             description = "something something",
             price = 123.4,
-            numberOfSales = 12
+            numberOfSales = 12,
+            firstSale = LocalDate.now()
         )
         connection.save(firstItem)
         connection.save(secondItem)
@@ -39,6 +42,7 @@ class ReadTest: TestSupport() {
             assertThat(allRows[index]["number_of_sales"]).isEqualTo(expectedSavedItems[index].numberOfSales)
             assertThat(allRows[index]["price"]).isEqualTo(expectedSavedItems[index].price)
             assertThat(allRows[index]["id"]).isEqualTo(expectedSavedItems[index].id)
+            assertThat(allRows[index]["first_sale"]).isEqualTo(expectedSavedItems[index].firstSale)
         }
     }
 
@@ -49,13 +53,15 @@ class ReadTest: TestSupport() {
            id = "123456789",
            description = "something something",
            price = 123.4,
-           numberOfSales = 12
+           numberOfSales = 12,
+           firstSale = LocalDate.now()
        )
        val secondItem = Item(
            id = "987654321",
            description = "something something",
            price = 123.4,
-           numberOfSales = 12
+           numberOfSales = 12,
+           firstSale = LocalDate.now()
        )
        connection.save(firstItem)
        connection.save(secondItem)

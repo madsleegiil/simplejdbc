@@ -3,6 +3,7 @@ package com.madslee.simplejdbc.integration
 import com.madslee.simplejdbc.save
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 class CreateTest: TestSupport() {
 
@@ -14,7 +15,8 @@ class CreateTest: TestSupport() {
             id = "123456789",
             description = "something something",
             price = 123.4,
-            numberOfSales = 12
+            numberOfSales = 12,
+            firstSale = LocalDate.now()
         )
 
         val rowsAffected = connection.save(
@@ -23,7 +25,8 @@ class CreateTest: TestSupport() {
                 "id" to item.id,
                 "description" to item.description,
                 "price" to item.price,
-                "numberOfSales" to item.numberOfSales
+                "numberOfSales" to item.numberOfSales,
+                "firstSale" to item.firstSale
             )
         )
 
@@ -37,7 +40,8 @@ class CreateTest: TestSupport() {
             id = "123456789",
             description = "something something",
             price = 123.4,
-            numberOfSales = 12
+            numberOfSales = 12,
+            firstSale = LocalDate.now()
         )
 
         val rowsAffected = connection.save(item)
@@ -52,7 +56,8 @@ class CreateTest: TestSupport() {
             id = "123456789",
             description = "something something",
             price = 123.4,
-            numberOfSales = 12
+            numberOfSales = 12,
+            firstSale = LocalDate.now()
         )
         val overridingPrice = 99.1
         val overridingColumnValues = mapOf("price" to overridingPrice)

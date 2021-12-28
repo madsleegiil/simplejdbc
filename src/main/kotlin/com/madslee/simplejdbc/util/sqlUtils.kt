@@ -2,6 +2,7 @@ package com.madslee.simplejdbc.util
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import java.time.LocalDate
 
 internal fun createParameterizableInsertStatement(table: String, columns: List<String>) =
     "insert into $table (${columns.joinToString(", ")}) values (${columns.map { "?" }.joinToString(", ")});"
@@ -26,4 +27,6 @@ internal fun ResultSet.get(column: String): Any =
     }
 
 internal fun PreparedStatement.addParams(orderedParams: Collection<Any>) =
-    orderedParams.forEachIndexed { index, any -> this.setObject(index + 1, any) }
+    orderedParams.forEachIndexed { index, any ->
+        this.setObject(index + 1, any)
+    }
