@@ -27,7 +27,7 @@ internal val Method.relatedFieldName: String
         .substring(3)
         .replaceFirstChar { it.lowercaseChar() }
 
-fun KClass<*>.callConstructor(argumentNamesValues: Map<String, Any>): Any {
+internal fun KClass<*>.callConstructor(argumentNamesValues: Map<String, Any>): Any {
     // TODO: convert paramNames and argumentNames to lower case before matching
     val paramNames = primaryConstructorParameterNames
     val argumentsInCorrectOrder = argumentNamesValues.valuesWithKeySorting(paramNames).values.toList()
