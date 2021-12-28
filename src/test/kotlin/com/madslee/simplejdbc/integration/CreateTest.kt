@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test
 
 class CreateTest: TestSupport() {
 
+    private val connection = dataSource.connection
+
     @Test
     fun `insert Item-object using columnsValues-map`() {
         val item = Item(
@@ -15,15 +17,14 @@ class CreateTest: TestSupport() {
             numberOfSales = 12
         )
 
-        val rowsAffected = save(
+        val rowsAffected = connection.save(
             table = "item",
             columnsValues = mapOf(
                 "id" to item.id,
                 "description" to item.description,
                 "price" to item.price,
                 "numberOfSales" to item.numberOfSales
-            ),
-            connection = dataSource.connection
+            )
         )
 
         Assertions.assertThat(rowsAffected).isEqualTo(1)
@@ -39,7 +40,7 @@ class CreateTest: TestSupport() {
             numberOfSales = 12
         )
 
-        val rowsAffected = save(item, dataSource.connection)
+        val rowsAffected = connection.save(item)
 
         Assertions.assertThat(rowsAffected).isEqualTo(1)
         assertWasSaved(item)
@@ -56,7 +57,7 @@ class CreateTest: TestSupport() {
         val overridingPrice = 99.1
         val overridingColumnValues = mapOf("price" to overridingPrice)
 
-        val rowsAffected = save(any = item, overridingColumnValues = overridingColumnValues, connection = dataSource.connection)
+        val rowsAffected = connection.save(any = item, overridingColumnValues = overridingColumnValues)
 
         Assertions.assertThat(rowsAffected).isEqualTo(1)
         val overridenItem = item.copy(price = overridingPrice)

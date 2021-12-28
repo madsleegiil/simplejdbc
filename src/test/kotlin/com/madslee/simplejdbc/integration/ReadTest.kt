@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test
 
 class ReadTest: TestSupport() {
 
+    private val connection = dataSource.connection
+
     @Test
     fun `get values of saved Item-objects by specifying columns`() {
         // Setup
@@ -22,12 +24,12 @@ class ReadTest: TestSupport() {
             price = 123.4,
             numberOfSales = 12
         )
-        save(firstItem, dataSource.connection)
-        save(secondItem, dataSource.connection)
+        connection.save(firstItem)
+        connection.save(secondItem)
 
         // Action
         val wantedColumns = listOf("number_of_sales", "price", "id")
-        val allRows = getAll(table, wantedColumns, dataSource.connection)
+        val allRows = connection.getAll(table, wantedColumns)
 
         // Results
         assertThat(allRows.size).isEqualTo(2)
@@ -55,11 +57,11 @@ class ReadTest: TestSupport() {
            price = 123.4,
            numberOfSales = 12
        )
-       save(firstItem, dataSource.connection)
-       save(secondItem, dataSource.connection)
+       connection.save(firstItem)
+       connection.save(secondItem)
 
        // Action
-       val allRows = getAll(Item::class, dataSource.connection)
+       val allRows = connection.getAll(Item::class)
 
        // Results
        assertThat(allRows.size).isEqualTo(2)
