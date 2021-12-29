@@ -15,7 +15,7 @@ fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String): List<T> =
         table = table,
         columns = clazz.fieldsWithType.entries.associate { it.key.camelCasetoSqlCase() to it.value.kotlin }
     ).map { databaseRow ->
-        clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap()) as T
+        clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap())
     }
 
 fun Connection.getAll(table: String, columns: Map<String, KClass<*>>): List<Map<String, Any>> =

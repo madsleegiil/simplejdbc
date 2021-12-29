@@ -28,12 +28,12 @@ internal val Method.relatedFieldName: String
         .substring(3)
         .replaceFirstChar { it.lowercaseChar() }
 
-internal fun KClass<*>.callConstructor(argumentNamesValues: Map<String, Any>): Any {
+internal fun <T: Any> KClass<*>.callConstructor(argumentNamesValues: Map<String, Any>): T {
     // TODO: convert paramNames and argumentNames to lower case before matching
     val paramNames = primaryConstructorParameterNames
     val argumentsInCorrectOrder = argumentNamesValues.valuesWithKeySorting(paramNames).values.toList()
-    return primaryConstructor?.call(*argumentsInCorrectOrder.toTypedArray())
-        ?: throw RuntimeException("Unable to get primary constructor for class ${this.name}")
+    val instance = primaryConstructor?.call(*argumentsInCorrectOrder.toTypedArray()) ?: throw RuntimeException("Unable to get primary constructor for class ${this.name}")
+    return instance as T
 }
 
 internal val KClass<*>.primaryConstructorParameterNames: List<String>
