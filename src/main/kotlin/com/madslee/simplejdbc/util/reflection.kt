@@ -2,8 +2,9 @@ package com.madslee.simplejdbc.util
 
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
-import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.jvm.javaField
 
 internal val Any.fieldsValuesMap: Map<String, Any>
     get() = this::class.java.methods
@@ -19,8 +20,8 @@ internal val KClass<*>.name: String
 internal val Method.isCustomGetter: Boolean
     get() = this.name.substring(0, 3) == "get" && this.name != "getClass"
 
-internal val KClass<*>.fields: Map<String, KClass<*>>
-    get() = this.memberProperties.associate { it.name to it.javaClass.kotlin }
+internal val KClass<*>.fields: Map<String, Class<*>>
+    get() = this.declaredMemberProperties.associate { it.name to it.javaField!!.type }
 
 internal val Method.relatedFieldName: String
     get() = this.name

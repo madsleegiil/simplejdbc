@@ -2,7 +2,6 @@ package com.madslee.simplejdbc.integration
 
 import com.madslee.simplejdbc.save
 import com.madslee.simplejdbc.util.fieldsValuesMap
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,19 +13,19 @@ class CreateTest: TestSupport() {
     fun `insert Item-object using columnsValues-map`() {
         val rowsAffected = connection.save(
             table = "item",
-            columnsValues = item.asColumnsValues()
+            columnsValues = anItem.asColumnsValues()
         )
 
-        Assertions.assertThat(rowsAffected).isEqualTo(1)
-        assertWasSavedCorrectly(item)
+        assertThat(rowsAffected).isEqualTo(1)
+        assertWasSavedCorrectly(anItem)
     }
 
     @Test
     fun `insert Item-object using simple method`() {
-        val rowsAffected = connection.save(item)
+        val rowsAffected = connection.save(anItem)
 
-        Assertions.assertThat(rowsAffected).isEqualTo(1)
-        assertWasSavedCorrectly(item)
+        assertThat(rowsAffected).isEqualTo(1)
+        assertWasSavedCorrectly(anItem)
     }
 
     @Test
@@ -34,10 +33,10 @@ class CreateTest: TestSupport() {
         val overridingPrice = 99.1
         val overridingColumnValues = mapOf("price" to overridingPrice)
 
-        val rowsAffected = connection.save(any = item, overridingColumnValues = overridingColumnValues)
+        val rowsAffected = connection.save(any = anItem, overridingColumnValues = overridingColumnValues)
 
-        Assertions.assertThat(rowsAffected).isEqualTo(1)
-        val overridenItem = item.copy(price = overridingPrice)
+        assertThat(rowsAffected).isEqualTo(1)
+        val overridenItem = anItem.copy(price = overridingPrice)
         assertWasSavedCorrectly(overridenItem)
     }
 

@@ -10,12 +10,12 @@ fun <T : Any> Connection.getAll(clazz: KClass<T>) =
         table = clazz.name
     )
 
-fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String): List<Any> =
+fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String): List<T> =
     getAll(
         table = table,
-        columns = clazz.fields.entries.associate { it.key.camelCasetoSqlCase() to it.value }
+        columns = clazz.fields.entries.associate { it.key.camelCasetoSqlCase() to it.value.kotlin }
     ).map { databaseRow ->
-        clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap())
+        clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap()) as T
     }
 
 fun Connection.getAll(table: String, columns: Map<String, KClass<*>>): List<Map<String, Any>> =

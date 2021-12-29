@@ -55,7 +55,7 @@ open class TestSupport {
         return dataSource.connection.prepareStatement("select * from $table").executeQuery()
     }
 
-    val item = Item(
+    val anItem = Item(
         id = "123456789",
         description = "something something",
         price = 123.4,
