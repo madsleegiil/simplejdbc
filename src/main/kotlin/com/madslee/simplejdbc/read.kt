@@ -18,7 +18,7 @@ fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String): List<T> =
         clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap())
     }
 
-fun Connection.getAll(table: String, columns: Map<String, KClass<*>>): List<Map<String, Any>> =
+private fun Connection.getAll(table: String, columns: Map<String, KClass<*>>): List<Map<String, Any>> =
     prepareStatement(createSelectColumnsStatement(table, columns.keys.toList()))
         .executeQuery()
         .map { resultSetRow ->

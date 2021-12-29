@@ -15,20 +15,7 @@ fun Connection.save(any: Any, table: String) =
         columnsValues = any.fieldsValuesMap
     )
 
-fun Connection.save(any: Any, overridingColumnValues: Map<String, Any>) =
-    save(
-        any = any,
-        table = any.className,
-        overridingColumnValues = overridingColumnValues
-    )
-
-fun Connection.save(any: Any, table: String, overridingColumnValues: Map<String, Any>) =
-    this.save(
-        table = table,
-        columnsValues = any.fieldsValuesMap.joinWith(overridingColumnValues)
-    )
-
-fun Connection.save(table: String, columnsValues: Map<String, Any>) =
+private fun Connection.save(table: String, columnsValues: Map<String, Any>) =
     prepareStatement(
         createParameterizableInsertStatement(table, columnsValues.keys.map { it.camelCasetoSqlCase() })
     ).let { preparedStatement ->
