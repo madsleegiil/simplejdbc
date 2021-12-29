@@ -5,13 +5,13 @@ import java.sql.Connection
 import kotlin.reflect.KClass
 
 fun <T : Any> Connection.getAll(clazz: KClass<T>) =
-    getAll(
+    this.getAll(
         clazz = clazz,
         table = clazz.name
     )
 
 fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String): List<T> =
-    getAll(
+    this.getAll(
         table = table,
         columns = clazz.fieldsWithType.entries.associate { it.key.camelCasetoSqlCase() to it.value.kotlin }
     ).map { databaseRow ->
