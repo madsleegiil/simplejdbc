@@ -20,7 +20,7 @@ internal val KClass<*>.name: String
 internal val Method.isCustomGetter: Boolean
     get() = this.name.substring(0, 3) == "get" && this.name != "getClass"
 
-internal val KClass<*>.fields: Map<String, Class<*>>
+internal val KClass<*>.fieldsWithType: Map<String, Class<*>>
     get() = this.declaredMemberProperties.associate { it.name to it.javaField!!.type }
 
 internal val Method.relatedFieldName: String

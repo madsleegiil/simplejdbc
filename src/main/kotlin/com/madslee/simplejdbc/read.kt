@@ -13,7 +13,7 @@ fun <T : Any> Connection.getAll(clazz: KClass<T>) =
 fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String): List<T> =
     getAll(
         table = table,
-        columns = clazz.fields.entries.associate { it.key.camelCasetoSqlCase() to it.value.kotlin }
+        columns = clazz.fieldsWithType.entries.associate { it.key.camelCasetoSqlCase() to it.value.kotlin }
     ).map { databaseRow ->
         clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap()) as T
     }
