@@ -1,2 +1,3 @@
+- allow updates
 - allow query constraints
 - allow saving all fields of class as Json
