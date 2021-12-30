@@ -1,7 +1,9 @@
 package com.madslee.simplejdbc.integration
 
+import com.madslee.simplejdbc.util.fieldsValuesMap
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.assertj.core.api.Assertions
 import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
@@ -75,12 +77,29 @@ open class TestSupport {
         zonedDateTimeField = resultSet.getObject("zoned_date_time_field", ZonedDateTime::class.java)
     )
 
+    fun assertItemsAreEqual(actualItem: Item, expectedItem: Item) {
+        val numberOfFieldsInItemClass = actualItem.fieldsValuesMap.size
+        val numberOfAsserts = 7
+
+        if (numberOfFieldsInItemClass != numberOfAsserts) {
+            throw RuntimeException("Remember to add new asserts in assertWasSavedCorrectly(Item)")
+        }
+
+        Assertions.assertThat(actualItem.id).isEqualTo(expectedItem.id)
+        Assertions.assertThat(actualItem.description).isEqualTo(expectedItem.description)
+        Assertions.assertThat(actualItem.price).isEqualTo(expectedItem.price)
+        Assertions.assertThat(actualItem.numberOfSales).isEqualTo(expectedItem.numberOfSales)
+        Assertions.assertThat(actualItem.firstSale).isEqualTo(expectedItem.firstSale)
+        Assertions.assertThat(actualItem.localDateTimeField).isEqualTo(expectedItem.localDateTimeField)
+        Assertions.assertThat(actualItem.zonedDateTimeField).isEqualTo(expectedItem.zonedDateTimeField)
+    }
+
     data class Item(
         val id: String,
         val description: String,
         val price: Double,
         val numberOfSales: Int,
-        val firstSale: LocalDate,
+        val firstSale: LocalDate?,
         val localDateTimeField: LocalDateTime,
         val zonedDateTimeField: ZonedDateTime,
     ) {
