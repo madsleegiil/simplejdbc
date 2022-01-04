@@ -2,7 +2,7 @@ package com.madslee.simplejdbc.integration
 
 import com.madslee.simplejdbc.getAll
 import com.madslee.simplejdbc.save
-import com.madslee.simplejdbc.Where
+import com.madslee.simplejdbc.whereEqual
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -33,7 +33,7 @@ class ReadTest : TestSupport() {
         connection.save(itemWithQueryPrice)
         connection.save(otherItem)
 
-        val rows = connection.getAll(Item::class, Where.equals("price", queryPrice))
+        val rows = connection.getAll(Item::class, whereEqual("price", queryPrice))
 
         assertThat(rows.size).isEqualTo(1)
         assertItemsAreEqual(rows.first(), itemWithQueryPrice)
@@ -47,7 +47,7 @@ class ReadTest : TestSupport() {
         connection.save(itemWithQueryDescription)
         connection.save(otherItem)
 
-        val rows = connection.getAll(Item::class, Where.equals("description", queryDescription))
+        val rows = connection.getAll(Item::class, whereEqual("description", queryDescription))
 
         assertThat(rows.size).isEqualTo(1)
         assertItemsAreEqual(rows.first(), itemWithQueryDescription)
@@ -64,8 +64,8 @@ class ReadTest : TestSupport() {
 
         val rows = connection.getAll(
             Item::class,
-            Where.equals("local_date_time_field", localDateTime),
-            Where.equals("price", price)
+            whereEqual("local_date_time_field", localDateTime),
+            whereEqual("price", price)
         )
 
         assertThat(rows.size).isEqualTo(1)
