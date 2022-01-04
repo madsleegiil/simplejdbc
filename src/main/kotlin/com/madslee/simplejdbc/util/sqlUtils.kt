@@ -11,7 +11,7 @@ internal fun createSelectColumnsStatement(table: String, columns: List<String>, 
 
 private fun createWhereClausesStatement(whereClauses: List<String>) =
     if (whereClauses.isEmpty()) ""
-    else whereClauses.joinToString(separator = ", ", prefix = "where ")
+    else whereClauses.joinToString(separator = " and ", prefix = "where ")
 
 internal fun <T> ResultSet.map(mapper: (ResultSet) -> T): List<T> {
     return generateSequence {
