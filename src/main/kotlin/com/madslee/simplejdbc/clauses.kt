@@ -7,11 +7,10 @@ private val isNotNullOperator = "is not null"
 
 fun whereEqual(column: String, match: Any?): Clause {
     val sql = if (match is Number) {
-        "$column = $match"
-    } else if (match == null) {
-        "$column is null"
+        numberCompare(column, match, equalOperator)
     } else {
-        "$column = '$match'"
+        val operator = if (match == null) isNullOperator else equalOperator
+        generalCompare(column, match, operator)
     }
 
     return Clause(sql)
@@ -19,15 +18,17 @@ fun whereEqual(column: String, match: Any?): Clause {
 
 fun whereNotEqual(column: String, match: Any?): Clause {
     val sql = if (match is Number) {
-        "$column != $match"
-    } else if (match == null) {
-        "$column is not null"
+        numberCompare(column, match, unequalOperator)
     } else {
-        "$column != '$match'"
+        val operator = if (match == null) isNotNullOperator else unequalOperator
+        generalCompare(column, match, operator)
     }
 
     return Clause(sql)
 }
+
+private fun generalCompare(column: String, match: Any?, operator: String) = "$column $operator '$match'"
+private fun numberCompare(column: String, match: Any?, operator: String) = "$column $operator $match"
 
 data class Clause(
     val sql: String
