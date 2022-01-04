@@ -3,6 +3,7 @@ package com.madslee.simplejdbc.integration
 import com.madslee.simplejdbc.getAll
 import com.madslee.simplejdbc.save
 import com.madslee.simplejdbc.whereEqual
+import com.madslee.simplejdbc.whereNotEqual
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -70,5 +71,24 @@ class ReadTest : TestSupport() {
 
         assertThat(rows.size).isEqualTo(1)
         assertItemsAreEqual(rows.first(), itemWithQueryValues)
+    }
+
+    @Test
+    fun `get saved items that equals on date but is unequal on number`() {
+        val localDateTime = LocalDateTime.now()
+        val unequalPrice = 12.1
+        val itemExpectedWithQuery = anItem.copy(localDateTimeField = localDateTime, price = 12421.12)
+        val otherItem = anItem.copy(id = "987654321", localDateTimeField = LocalDateTime.now().minusDays(1), price = unequalPrice)
+        connection.save(itemExpectedWithQuery)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(
+            Item::class,
+            whereEqual("local_date_time_field", localDateTime),
+            whereNotEqual("price", unequalPrice)
+        )
+
+        assertThat(rows.size).isEqualTo(1)
+        assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
     }
 }
