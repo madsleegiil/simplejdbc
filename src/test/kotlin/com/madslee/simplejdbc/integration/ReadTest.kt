@@ -1,9 +1,6 @@
 package com.madslee.simplejdbc.integration
 
-import com.madslee.simplejdbc.getAll
-import com.madslee.simplejdbc.save
-import com.madslee.simplejdbc.whereEqual
-import com.madslee.simplejdbc.whereNotEqual
+import com.madslee.simplejdbc.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -109,5 +106,79 @@ class ReadTest : TestSupport() {
 
         assertThat(rows.size).isEqualTo(1)
         assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
+    }
+
+    @Test
+    fun `get saved items that with date greater than comparison`() {
+        val compareDate = LocalDateTime.now().minusMonths(2)
+        val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.plusDays(1))
+        val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate)
+        connection.save(itemExpectedWithQuery)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(
+            Item::class,
+            whereGreaterThan("local_date_time_field", compareDate)
+        )
+
+        assertThat(rows.size).isEqualTo(1)
+        assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
+    }
+
+    @Test
+    fun `get saved items that with date lesser than comparison`() {
+        val compareDate = LocalDateTime.now()
+        val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.minusDays(1))
+        val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate)
+        connection.save(itemExpectedWithQuery)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(
+            Item::class,
+            whereLessThan("local_date_time_field", compareDate)
+        )
+
+        assertThat(rows.size).isEqualTo(1)
+        assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
+    }
+
+    @Test
+    fun `get saved items that with date greater than or equal to comparison`() {
+        val compareDate = LocalDateTime.now().minusMonths(2)
+        val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.plusDays(1))
+        val otherItemExpectedWithQuery = anItem.copy(id = "3265", localDateTimeField = compareDate)
+        val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate.minusDays(1))
+        connection.save(itemExpectedWithQuery)
+        connection.save(otherItemExpectedWithQuery)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(
+            Item::class,
+            whereGreaterThanOrEqualTo("local_date_time_field", compareDate)
+        )
+
+        assertThat(rows.size).isEqualTo(2)
+        assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
+        assertItemsAreEqual(rows[1], otherItemExpectedWithQuery)
+    }
+
+    @Test
+    fun `get saved items that with date lesser than or equal to comparison`() {
+        val compareDate = LocalDateTime.now()
+        val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.minusDays(1))
+        val otherItemExpectedWithQuery = anItem.copy(id = "656565", localDateTimeField = compareDate)
+        val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate.plusDays(1))
+        connection.save(itemExpectedWithQuery)
+        connection.save(otherItemExpectedWithQuery)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(
+            Item::class,
+            whereLessThanOrEqualTo("local_date_time_field", compareDate)
+        )
+
+        assertThat(rows.size).isEqualTo(2)
+        assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
+        assertItemsAreEqual(rows[1], otherItemExpectedWithQuery)
     }
 }
