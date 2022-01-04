@@ -92,22 +92,22 @@ class ReadTest : TestSupport() {
         assertThat(rows.size).isEqualTo(1)
         assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
     }
-//
-//    @Test
-//    fun `get saved items that equals on one date field but where other date field is null`() {
-//        val localDateTime = LocalDateTime.now()
-//        val itemExpectedWithQuery = anItem.copy(localDateTimeField = localDateTime, firstSale = null)
-//        val otherItem = anItem.copy(id = "987654321", localDateTimeField = LocalDateTime.now().minusDays(1), firstSale = LocalDate.now())
-//        connection.save(itemExpectedWithQuery)
-//        connection.save(otherItem)
-//
-//        val rows = connection.getAll(
-//            Item::class,
-//            whereEqual("local_date_time_field", localDateTime),
-//            whereEqual("first_sale", null)
-//        )
-//
-//        assertThat(rows.size).isEqualTo(1)
-//        assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
-//    }
+
+    @Test
+    fun `get saved items that equals on one date field but where other date field is null`() {
+        val localDateTime = LocalDateTime.now()
+        val itemExpectedWithQuery = anItem.copy(localDateTimeField = localDateTime, firstSale = null)
+        val otherItem = anItem.copy(id = "987654321", localDateTimeField = LocalDateTime.now().minusDays(1), firstSale = LocalDate.now())
+        connection.save(itemExpectedWithQuery)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(
+            Item::class,
+            whereEqual("local_date_time_field", localDateTime),
+            whereEqual("first_sale", null)
+        )
+
+        assertThat(rows.size).isEqualTo(1)
+        assertItemsAreEqual(rows.first(), itemExpectedWithQuery)
+    }
 }
