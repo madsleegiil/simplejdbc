@@ -4,22 +4,24 @@ import com.madslee.simplejdbc.util.*
 import java.sql.Connection
 import kotlin.reflect.KClass
 
-fun <T : Any> Connection.getAll(clazz: KClass<T>) =
+fun <T : Any> Connection.getAll(clazz: KClass<T>, vararg clause: Clause) =
     this.getAll(
         clazz = clazz,
-        table = clazz.name
+        table = clazz.name,
+        clause = clause
     )
 
-fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String): List<T> =
+fun <T : Any> Connection.getAll(clazz: KClass<T>, table: String, vararg clause: Clause): List<T> =
     this.getAll(
         table = table,
-        columns = clazz.fieldsWithType.entries.associate { it.key.camelCasetoSqlCase() to it.value.kotlin }
+        columns = clazz.fieldsWithType.entries.associate { it.key.camelCasetoSqlCase() to it.value.kotlin },
+        clause = clause
     ).map { databaseRow ->
         clazz.callConstructor(databaseRow.map { it.key.sqlCaseToCamelCase() to it.value }.toMap())
     }
 
-private fun Connection.getAll(table: String, columns: Map<String, KClass<*>>): List<Map<String, Any>> =
-    prepareStatement(createSelectColumnsStatement(table, columns.keys.toList()))
+private fun Connection.getAll(table: String, columns: Map<String, KClass<*>>, vararg clause: Clause): List<Map<String, Any>> =
+    prepareStatement(createSelectColumnsStatement(table, columns.keys.toList(), clause.map { it.sql }))
         .executeQuery()
         .map { resultSetRow ->
             columns.map { (columnName, columnClass) ->

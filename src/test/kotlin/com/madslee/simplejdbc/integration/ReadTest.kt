@@ -2,8 +2,10 @@ package com.madslee.simplejdbc.integration
 
 import com.madslee.simplejdbc.getAll
 import com.madslee.simplejdbc.save
+import com.madslee.simplejdbc.Where
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 
 class ReadTest: TestSupport() {
 
@@ -22,4 +24,46 @@ class ReadTest: TestSupport() {
        assertItemsAreEqual(allRows[0], firstItem)
        assertItemsAreEqual(allRows[0], firstItem)
    }
+
+    @Test
+    fun `get saved items with equals clause on number`() {
+        val queryPrice = 12.1
+        val itemWithQueryPrice = anItem.copy(price = queryPrice)
+        val otherItem = anItem.copy(id = "987654321" ,price = 123.21)
+        connection.save(itemWithQueryPrice)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(Item::class, Where.equals("price", queryPrice))
+
+        assertThat(rows.size).isEqualTo(1)
+        assertItemsAreEqual(rows.first(), itemWithQueryPrice)
+    }
+
+    @Test
+    fun `get saved items with equals clause on string`() {
+        val queryDescription = "Query description"
+        val itemWithQueryDescription = anItem.copy(description = queryDescription)
+        val otherItem = anItem.copy(id = "987654321", description = "other description")
+        connection.save(itemWithQueryDescription)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(Item::class, Where.equals("description", queryDescription))
+
+        assertThat(rows.size).isEqualTo(1)
+        assertItemsAreEqual(rows.first(), itemWithQueryDescription)
+    }
+
+    @Test
+    fun `get saved items with equals clause on date`() {
+        val localDateTime = LocalDateTime.now()
+        val itemWithQueryLocalDateTime = anItem.copy(localDateTimeField = localDateTime)
+        val otherItem = anItem.copy(id = "987654321", localDateTimeField = LocalDateTime.now().minusDays(1))
+        connection.save(itemWithQueryLocalDateTime)
+        connection.save(otherItem)
+
+        val rows = connection.getAll(Item::class, Where.equals("local_date_time_field", localDateTime))
+
+        assertThat(rows.size).isEqualTo(1)
+        assertItemsAreEqual(rows.first(), itemWithQueryLocalDateTime)
+    }
 }

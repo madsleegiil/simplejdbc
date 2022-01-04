@@ -6,8 +6,12 @@ import java.sql.ResultSet
 internal fun createParameterizableInsertStatement(table: String, columns: List<String>) =
     "insert into $table (${columns.joinToString(", ")}) values (${columns.map { "?" }.joinToString(", ")});"
 
-internal fun createSelectColumnsStatement(table: String, columns: List<String>) =
-    "select ${columns.map { it }.joinToString(", ")} from $table"
+internal fun createSelectColumnsStatement(table: String, columns: List<String>, whereClauses: List<String>) =
+    "select ${columns.map { it }.joinToString(", ")} from $table ${createWhereClausesStatement(whereClauses)}"
+
+private fun createWhereClausesStatement(whereClauses: List<String>) =
+    if (whereClauses.isEmpty()) ""
+    else whereClauses.joinToString(separator = ", ", prefix = "where ")
 
 internal fun <T> ResultSet.map(mapper: (ResultSet) -> T): List<T> {
     return generateSequence {
