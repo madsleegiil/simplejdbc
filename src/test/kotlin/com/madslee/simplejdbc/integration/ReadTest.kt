@@ -14,10 +14,10 @@ class ReadTest : TestSupport() {
     fun `get saved items by specifying class only`() {
         val firstItem = anItem
         val secondItem = anItem.copy(id = "987654321")
-        connection.save(firstItem)
-        connection.save(secondItem)
+        connection.insert(firstItem)
+        connection.insert(secondItem)
 
-        val allRows = connection.getAll(Item::class)
+        val allRows = connection.select(Item::class)
 
         assertThat(allRows.size).isEqualTo(2)
         assertItemsAreEqual(allRows[0], firstItem)
@@ -29,10 +29,10 @@ class ReadTest : TestSupport() {
         val queryPrice = 12.1
         val itemWithQueryPrice = anItem.copy(price = queryPrice)
         val otherItem = anItem.copy(id = "987654321", price = 123.21)
-        connection.save(itemWithQueryPrice)
-        connection.save(otherItem)
+        connection.insert(itemWithQueryPrice)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(Item::class, whereEqual("price", queryPrice))
+        val rows = connection.select(Item::class, whereEqual("price", queryPrice))
 
         assertThat(rows.size).isEqualTo(1)
         assertItemsAreEqual(rows.first(), itemWithQueryPrice)
@@ -43,10 +43,10 @@ class ReadTest : TestSupport() {
         val queryDescription = "Query description"
         val itemWithQueryDescription = anItem.copy(description = queryDescription)
         val otherItem = anItem.copy(id = "987654321", description = "other description")
-        connection.save(itemWithQueryDescription)
-        connection.save(otherItem)
+        connection.insert(itemWithQueryDescription)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(Item::class, whereEqual("description", queryDescription))
+        val rows = connection.select(Item::class, whereEqual("description", queryDescription))
 
         assertThat(rows.size).isEqualTo(1)
         assertItemsAreEqual(rows.first(), itemWithQueryDescription)
@@ -58,10 +58,10 @@ class ReadTest : TestSupport() {
         val price = 12.1
         val itemWithQueryValues = anItem.copy(localDateTimeField = localDateTime, price = price)
         val otherItem = anItem.copy(id = "987654321", localDateTimeField = LocalDateTime.now().minusDays(1), price = 12211.1)
-        connection.save(itemWithQueryValues)
-        connection.save(otherItem)
+        connection.insert(itemWithQueryValues)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(
+        val rows = connection.select(
             Item::class,
             whereEqual("local_date_time_field", localDateTime),
             whereEqual("price", price)
@@ -77,10 +77,10 @@ class ReadTest : TestSupport() {
         val unequalPrice = 12.1
         val itemExpectedWithQuery = anItem.copy(localDateTimeField = localDateTime, price = 12421.12)
         val otherItem = anItem.copy(id = "987654321", localDateTimeField = LocalDateTime.now().minusDays(1), price = unequalPrice)
-        connection.save(itemExpectedWithQuery)
-        connection.save(otherItem)
+        connection.insert(itemExpectedWithQuery)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(
+        val rows = connection.select(
             Item::class,
             whereEqual("local_date_time_field", localDateTime),
             whereNotEqual("price", unequalPrice)
@@ -95,10 +95,10 @@ class ReadTest : TestSupport() {
         val localDateTime = LocalDateTime.now()
         val itemExpectedWithQuery = anItem.copy(localDateTimeField = localDateTime, firstSale = null)
         val otherItem = anItem.copy(id = "987654321", localDateTimeField = LocalDateTime.now().minusDays(1), firstSale = LocalDate.now())
-        connection.save(itemExpectedWithQuery)
-        connection.save(otherItem)
+        connection.insert(itemExpectedWithQuery)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(
+        val rows = connection.select(
             Item::class,
             whereEqual("local_date_time_field", localDateTime),
             whereEqual("first_sale", null)
@@ -113,10 +113,10 @@ class ReadTest : TestSupport() {
         val compareDate = LocalDateTime.now().minusMonths(2)
         val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.plusDays(1))
         val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate)
-        connection.save(itemExpectedWithQuery)
-        connection.save(otherItem)
+        connection.insert(itemExpectedWithQuery)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(
+        val rows = connection.select(
             Item::class,
             whereGreaterThan("local_date_time_field", compareDate)
         )
@@ -130,10 +130,10 @@ class ReadTest : TestSupport() {
         val compareDate = LocalDateTime.now()
         val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.minusDays(1))
         val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate)
-        connection.save(itemExpectedWithQuery)
-        connection.save(otherItem)
+        connection.insert(itemExpectedWithQuery)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(
+        val rows = connection.select(
             Item::class,
             whereLessThan("local_date_time_field", compareDate)
         )
@@ -148,11 +148,11 @@ class ReadTest : TestSupport() {
         val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.plusDays(1))
         val otherItemExpectedWithQuery = anItem.copy(id = "3265", localDateTimeField = compareDate)
         val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate.minusDays(1))
-        connection.save(itemExpectedWithQuery)
-        connection.save(otherItemExpectedWithQuery)
-        connection.save(otherItem)
+        connection.insert(itemExpectedWithQuery)
+        connection.insert(otherItemExpectedWithQuery)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(
+        val rows = connection.select(
             Item::class,
             whereGreaterThanOrEqualTo("local_date_time_field", compareDate)
         )
@@ -168,11 +168,11 @@ class ReadTest : TestSupport() {
         val itemExpectedWithQuery = anItem.copy(localDateTimeField = compareDate.minusDays(1))
         val otherItemExpectedWithQuery = anItem.copy(id = "656565", localDateTimeField = compareDate)
         val otherItem = anItem.copy(id = "987654321", localDateTimeField = compareDate.plusDays(1))
-        connection.save(itemExpectedWithQuery)
-        connection.save(otherItemExpectedWithQuery)
-        connection.save(otherItem)
+        connection.insert(itemExpectedWithQuery)
+        connection.insert(otherItemExpectedWithQuery)
+        connection.insert(otherItem)
 
-        val rows = connection.getAll(
+        val rows = connection.select(
             Item::class,
             whereLessThanOrEqualTo("local_date_time_field", compareDate)
         )

@@ -1,6 +1,6 @@
 package com.madslee.simplejdbc.integration
 
-import com.madslee.simplejdbc.save
+import com.madslee.simplejdbc.insert
 import com.madslee.simplejdbc.util.fieldsValuesMap
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -11,7 +11,7 @@ class CreateTest: TestSupport() {
 
     @Test
     fun `insert Item-object`() {
-        val rowsAffected = connection.save(anItem)
+        val rowsAffected = connection.insert(anItem)
 
         assertThat(rowsAffected).isEqualTo(1)
         assertWasSavedCorrectly(anItem)
