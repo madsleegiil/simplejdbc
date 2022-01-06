@@ -1,12 +1,23 @@
 package com.madslee.simplejdbc.integration
 
 import com.madslee.simplejdbc.*
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
+import javax.sql.DataSource
 
 class ReadTest : TestSupport() {
+
+    private val dataSource: DataSource = HikariDataSource(
+        HikariConfig().apply {
+            jdbcUrl = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"
+            username = "sa"
+            password = ""
+            validate()
+        })
 
     private val connection = dataSource.connection
 
