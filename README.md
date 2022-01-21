@@ -1,6 +1,6 @@
 # SimpleJDBC
 
-SimpleJDBS is a small Kotlin library with extension functions on java.sql.Connection making it easy to perform simple CRUD operations with Kotlin data classes.  
+SimpleJDBS is a small Kotlin library with extension functions on java.sql.Connection making it easy to perform simple CRUD operations with Kotlin data classes. The library does not supportany database relations, such as one-to-one, many-to-one etc.
 
 Still under development, no guarantees given.
 
