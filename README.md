@@ -11,7 +11,7 @@ The library handles the conversion of camelCase in Kotlin to snake_case in SQL.
 
 ### Insert
 
-Using object of a data class as only parameter:
+Using the object of a data class as only parameter:
 
     connection.insert(dataClassObject)
 
@@ -23,19 +23,20 @@ If the DB table has a different name than the data class, a second parameter can
 
 Using the data class type as only parameter:
 
-    val myDataClassObject = connection.select(DataClass::class)
+    val myList: List<DataClass> = connection.select(DataClass::class)
 
 If the DB table has a different name than the data class, a second parameter can be given:
 
-    val myDataClassObject = connection.select(DataClass::class, "my_db_table"). 
+    val myList: List<DataClass> = connection.select(DataClass::class, "my_db_table"). 
 
 Select operations support constraints. One or more constraints are accepted as varargs:
 
-    val myDataClassObject = connection.select(DataClass::class, whereEqual("price", 165), whereEqual(name, "name))
+    val myList: List<DataClass> = connection.select(DataClass::class, whereEqual("price", 165), whereEqual(name, "name))
     
-    val otherDataClassObject = connection.select(DataClass::class, "my_db_table", whereEqual("price", 165)
+    val myList: List<DataClass> = connection.select(DataClass::class, "my_db_table", whereEqual("price", 165)
 
-The following constraints are offered:
+### Constraints
+The following constraints are offered on select, update and delete:
 
     whereEqual("columnName", Any?)
     whereNotEqual("columnName", Any?)
