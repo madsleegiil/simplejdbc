@@ -35,6 +35,18 @@ Select operations support constraints. One or more constraints are accepted as v
     
     val myList: List<DataClass> = connection.select(DataClass::class, "my_db_table", whereEqual("price", 165)
 
+### Update
+
+Update one object by specifying a where clause:
+
+    val rowsAffected = connection.update(updatedDataClassObject, whereEqual("field", oldValue)
+
+If the DB table has a different name than the data class, the table name can be specified:
+
+    val rowsAffected = connection.update(updatedDataClassObject, "table", whereEqual("field", oldValue) 
+
+Take caution when specifying a column in the where clause that is not the primary key, as this may result in an Exception.
+
 ### Constraints
 The following constraints are offered on select, update and delete:
 
@@ -57,7 +69,7 @@ The following constraints are offered on select, update and delete:
 More data types may function, but have not been tested. 
 
 ### Future additions
-- update operations
+- update multiple rows
 - delete operations
 - batch savings
 - allow saving the whole object as one Json string
