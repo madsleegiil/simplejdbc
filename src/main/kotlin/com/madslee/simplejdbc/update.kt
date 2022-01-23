@@ -7,22 +7,22 @@ import com.madslee.simplejdbc.util.createParametrizableUpdateStatement
 import com.madslee.simplejdbc.util.fieldsValuesMap
 import java.sql.Connection
 
-fun Connection.updateOne(updatedObject: Any, clause: WhereEqualClause) =
-    updateOne(
+fun Connection.update(updatedObject: Any, clause: WhereEqualClause) =
+    update(
         table = updatedObject.className,
         updatedObject = updatedObject,
         clause = clause
     )
 
-fun Connection.updateOne(updatedObject: Any, table: String, clause: WhereEqualClause) {
-    updateOne(
+fun Connection.update(updatedObject: Any, table: String, clause: WhereEqualClause) {
+    update(
         table = table,
         columnsValues = updatedObject.fieldsValuesMap,
         clause = clause
     )
 }
 
-private fun Connection.updateOne(table: String, columnsValues: Map<String, Any>, clause: WhereEqualClause) =
+private fun Connection.update(table: String, columnsValues: Map<String, Any>, clause: WhereEqualClause) =
     if (columnsValues.isEmpty()) throw IllegalArgumentException("Can't update with empty values")
     else {
         prepareStatement(

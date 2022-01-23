@@ -45,7 +45,8 @@ If the DB table has a different name than the data class, the table name can be 
 
     val rowsAffected = connection.update(updatedDataClassObject, "table", whereEqual("field", oldValue) 
 
-Take caution when specifying a column in the where clause that is not the primary key, as this may result in an Exception.
+This operation will update any rows matching the where clause. If the table has a primary key, the column specified in the where clause should be the primary key, as otherwise the update statement may result in an exception being thrown.
+
 
 ### Constraints
 The following constraints are offered on select, update and delete:
