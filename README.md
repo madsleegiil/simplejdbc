@@ -37,7 +37,7 @@ Select operations support constraints. One or more constraints are accepted as v
 
 ### Update
 
-Update one object by altering its values except for the value of the class field that is mapped to the database primary key:
+Update one row by altering the values of an object except for the value of the class field that is mapped to the database primary key:
 
     val rowsAffected = connection.updateById(updatedDataClassObject)
 
