@@ -2,7 +2,7 @@ package com.madslee.simplejdbc.integration
 
 import com.madslee.simplejdbc.insert
 import com.madslee.simplejdbc.select
-import com.madslee.simplejdbc.update
+import com.madslee.simplejdbc.updateById
 import com.madslee.simplejdbc.whereEqual
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test
 import javax.sql.DataSource
 
 class UpdateTest: TestSupport() {
+
+    // TODO: Add tests updating row with composite primary key
+    // TODO: Add test failing because of no primary key
 
     private val dataSource: DataSource = HikariDataSource(
         HikariConfig().apply {
@@ -29,7 +32,7 @@ class UpdateTest: TestSupport() {
         assertThat(rowsAffected).isEqualTo(1)
 
         val itemWithUpdatedPrice = anItem.copy(price = 12434343.3)
-        connection.update(itemWithUpdatedPrice, whereEqual("id", anItem.id))
+        connection.updateById(itemWithUpdatedPrice)
 
         val allRows = connection.select(Item::class)
         assertThat(allRows.size).isEqualTo(1)

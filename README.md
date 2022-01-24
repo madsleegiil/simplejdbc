@@ -37,16 +37,13 @@ Select operations support constraints. One or more constraints are accepted as v
 
 ### Update
 
-Update one object by specifying a where clause:
+Update one object by altering its values except for the value of the class field that is mapped to the database primary key:
 
-    val rowsAffected = connection.update(updatedDataClassObject, whereEqual("field", oldValue)
+    val rowsAffected = connection.updateById(updatedDataClassObject)
 
 If the DB table has a different name than the data class, the table name can be specified:
 
-    val rowsAffected = connection.update(updatedDataClassObject, "table", whereEqual("field", oldValue) 
-
-This operation will update any rows matching the where clause. If the table has a primary key, the column specified in the where clause should be the primary key, as otherwise the update statement may result in an exception being thrown.
-
+    val rowsAffected = connection.updateById(updatedDataClassObject, "table")
 
 ### Constraints
 The following constraints are offered on select, update and delete:
