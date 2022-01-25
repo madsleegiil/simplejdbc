@@ -67,6 +67,8 @@ The following constraints are offered on select, update and delete:
 More data types may function, but have not been tested. 
 
 ### Future additions
+- delete by id
+- delete by clauses
 - public sql util functions
 - batch savings
 - allow saving the whole object as one Json string
