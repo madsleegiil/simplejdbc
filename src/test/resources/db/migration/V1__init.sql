@@ -1,5 +1,5 @@
 CREATE TABLE item (
-    id VARCHAR(20) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     description TEXT,
     price FLOAT,
     number_of_sales INTEGER,

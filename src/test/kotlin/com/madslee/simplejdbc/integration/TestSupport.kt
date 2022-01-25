@@ -1,5 +1,6 @@
 package com.madslee.simplejdbc.integration
 
+import com.madslee.simplejdbc.insert
 import com.madslee.simplejdbc.util.fieldsValuesMap
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -8,10 +9,12 @@ import org.flywaydb.core.Flyway
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import java.sql.Connection
 import java.sql.ResultSet
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
+import java.util.*
 import javax.sql.DataSource
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -56,15 +59,45 @@ open class TestSupport {
         return dataSource.connection.prepareStatement("select * from $table").executeQuery()
     }
 
-    val anItem = Item(
-        id = "123456789",
-        description = "something something",
-        price = 123.4,
-        numberOfSales = 12,
-        firstSale = LocalDate.now(),
-        localDateTimeField = LocalDateTime.now(),
-        zonedDateTimeField = ZonedDateTime.now()
+    fun getTestItem(
+        id: String = UUID.randomUUID().toString(),
+        description: String = "description",
+        price: Double = 123.4,
+        numberOfSales: Int = 12,
+        firstSale: LocalDate? = LocalDate.now(),
+        localDateTimeField: LocalDateTime = LocalDateTime.now(),
+        zonedDateTimeField: ZonedDateTime = ZonedDateTime.now()
+    ) = Item(
+        id,
+        description,
+        price,
+        numberOfSales,
+        firstSale,
+        localDateTimeField,
+        zonedDateTimeField
     )
+
+    fun Connection.insertTestItem(
+        id: String = UUID.randomUUID().toString(),
+        description: String = "description",
+        price: Double = 123.4,
+        numberOfSales: Int = 12,
+        firstSale: LocalDate? = LocalDate.now(),
+        localDateTimeField: LocalDateTime = LocalDateTime.now(),
+        zonedDateTimeField: ZonedDateTime = ZonedDateTime.now()
+    ): Item {
+        val item = Item(
+            id,
+            description,
+            price,
+            numberOfSales,
+            firstSale,
+            localDateTimeField,
+            zonedDateTimeField
+        )
+        insert(item)
+        return item
+    }
 
     fun toItem(resultSet: ResultSet) = Item(
         id = resultSet.getString("id"),

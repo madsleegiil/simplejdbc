@@ -22,10 +22,10 @@ class CreateTest: TestSupport() {
 
     @Test
     fun `insert Item-object`() {
-        val rowsAffected = connection.insert(anItem)
-
+        val item = getTestItem()
+        val rowsAffected = connection.insert(item)
         assertThat(rowsAffected).isEqualTo(1)
-        assertWasSavedCorrectly(anItem)
+        assertWasSavedCorrectly(item)
     }
 
     private fun assertWasSavedCorrectly(item: Item) {

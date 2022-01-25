@@ -27,11 +27,9 @@ class UpdateTest: TestSupport() {
 
     @Test
     fun `Update price of one object by ID`() {
-        val item = anItem
-        val rowsAffected = connection.insert(item)
-        assertThat(rowsAffected).isEqualTo(1)
+        val item = connection.insertTestItem()
 
-        val itemWithUpdatedPrice = anItem.copy(price = 12434343.3)
+        val itemWithUpdatedPrice = item.copy(price = 12434343.3)
         connection.updateById(itemWithUpdatedPrice)
 
         val allRows = connection.select(Item::class)
