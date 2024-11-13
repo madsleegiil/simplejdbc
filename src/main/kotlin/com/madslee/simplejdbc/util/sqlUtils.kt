@@ -33,15 +33,14 @@ internal fun <T> ResultSet.map(mapper: (ResultSet) -> T): List<T> {
     }.toList()
 }
 
-internal fun PreparedStatement.addParams(orderedParams: Collection<Any>) =
+internal fun PreparedStatement.addParams(orderedParams: Collection<Any>) {
     orderedParams.forEachIndexed { index, any ->
         this.setObject(index + 1, any)
     }
+}
 
 internal fun Connection.getPrimaryKeys(table: String) =
     metaData.getPrimaryKeys(catalog, schema, table.uppercase())
         .map { resultSetRow ->
             resultSetRow.getString("COLUMN_NAME")
         }
-
-

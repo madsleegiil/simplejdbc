@@ -3,8 +3,7 @@ package com.madslee.simplejdbc.unit
 import com.madslee.simplejdbc.integration.TestSupport
 import com.madslee.simplejdbc.util.createParameterizableInsertStatement
 import com.madslee.simplejdbc.util.getPrimaryKeys
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
+import io.zonky.test.db.postgres.embedded.EmbeddedPostgres
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -14,13 +13,7 @@ import javax.sql.DataSource
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SqlUtilsTest {
 
-    private val dataSource: DataSource = HikariDataSource(
-        HikariConfig().apply {
-            jdbcUrl = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"
-            username = "sa"
-            password = ""
-            validate()
-        })
+    val dataSource: DataSource = EmbeddedPostgres.start().postgresDatabase
 
     @BeforeAll
     fun setup() {

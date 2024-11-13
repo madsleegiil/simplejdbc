@@ -2,28 +2,15 @@ package com.madslee.simplejdbc.integration
 
 import com.madslee.simplejdbc.insert
 import com.madslee.simplejdbc.util.fieldsValuesMap
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import javax.sql.DataSource
 
 class CreateTest: TestSupport() {
-
-    private val dataSource: DataSource = HikariDataSource(
-        HikariConfig().apply {
-            jdbcUrl = "jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1"
-            username = "sa"
-            password = ""
-            validate()
-        })
-
-    private val connection = dataSource.connection
 
     @Test
     fun `insert Item-object`() {
         val item = getTestItem()
-        val rowsAffected = connection.insert(item)
+        val rowsAffected = dataSource.connection.insert(item)
         assertThat(rowsAffected).isEqualTo(1)
         assertWasSavedCorrectly(item)
     }

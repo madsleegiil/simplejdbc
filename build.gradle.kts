@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm") version "1.5.30"
+    kotlin("jvm") version "2.0.0"
 }
 
 group = "com.madslee"
@@ -14,16 +12,16 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.0")
     testImplementation(kotlin("test"))
-    testImplementation("com.zaxxer:HikariCP:4.0.2")
-    testImplementation("com.h2database:h2:1.4.200")
-    testImplementation("org.flywaydb:flyway-core:7.5.3")
-    testImplementation("org.assertj:assertj-core:3.21.0")
+    testImplementation("io.zonky.test:embedded-postgres:2.0.7")
+    testImplementation("org.flywaydb:flyway-database-postgresql:10.21.0")
+    testImplementation("org.postgresql:postgresql:42.7.4")
+    testImplementation("org.assertj:assertj-core:3.26.3")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+kotlin {
+    jvmToolchain(21)
 }
